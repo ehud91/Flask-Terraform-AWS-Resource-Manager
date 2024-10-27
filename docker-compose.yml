@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - AWS_ACCESS_KEY_ID=your_access_key
+      - AWS_SECRET_ACCESS_KEY=your_secret_key
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ./terraform:/app/terraform  # Mount Terraform files
+    command: python3 resources.py
