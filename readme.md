@@ -21,15 +21,15 @@ This project is a Flask API designed to dynamically manage AWS resources (such a
 
 ### Installation
 
-    1. Clone the repository:
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/ehud91/flask-terraform-aws-manager.git
 cd flask-terraform-aws-manager
 ```
-    2. Set up your AWS credentials as environment variables (see Environment Variables).
+2. Set up your AWS credentials as environment variables (see Environment Variables).
 
-    3. Build and run the Docker containers with Docker Compose or deploy to Kubernetes using Helm.
+3. Build and run the Docker containers with Docker Compose or deploy to Kubernetes using Helm.
 
 ### Project Structure    
 
@@ -63,20 +63,76 @@ The following environment variables are required for the app to authenticate wit
 
 These can be set directly in docker-compose.yml or values.yaml for Kubernetes.
 
+### Running Locally (Without Docker)
+
+To run the Flask and Terraform application locally without using Docker, follow these steps:
+
+1. Clone the Repository
+
+    First, clone the repository to your local machine:
+```bash
+git clone https://github.com/yourusername/flask-terraform-aws-manager.git
+cd flask-terraform-aws-manager
+```
+3. Install Required Dependencies
+
+    Next, install the necessary Python packages. Make sure you have pip installed, then run:
+```bash
+pip install -r requirements.txt
+```
+    Create a requirements.txt file in the project root with the following content if it doesn’t already exist:
+
+4. Set Up AWS Credentials
+
+    The application requires access to your AWS credentials to manage AWS resources. You can set these up using environment variables.
+    Option 1: Set Credentials as Environment Variables
+
+    Set the following environment variables in your terminal:
+
+```bash
+export AWS_ACCESS_KEY_ID=your_access_key
+export AWS_SECRET_ACCESS_KEY=your_secret_key
+export AWS_DEFAULT_REGION=us-east-1
+```
+Replace your_access_key, your_secret_key, and us-east-1 with your actual AWS credentials and desired region.
+Option 2: Use an AWS Configuration File
+
+Alternatively, you can configure your AWS credentials using the AWS CLI. If you have the AWS CLI installed, you can run:
+
+```bash
+aws configure
+```
+Follow the prompts to enter your access key, secret key, region, and output format.
+
+```bash
+cd terraform
+terraform init
+cd ..
+```
+6. Run the Flask Application
+
+Now, you can run the Flask application
+
+```bash
+python resources.py
+```    
+    The Flask API will start and be accessible at http://localhost:5000.
+    
+
 
 ### Running Locally with Docker Compose
 
-    1. Build and Run the Containers:
+1. Build and Run the Containers:
 ```bash
 docker-compose up --build
 ```
 
-    2. Access the API: The API is available at http://localhost:5000.
+2. Access the API: The API is available at http://localhost:5000.
 
-    3. Available Endpoints:
-        GET /resources: Get all AWS resources. 
-        POST /resources: Creates AWS resources based on specified parameters.
-        DELETE /resource: Deletes specified AWS resources.
+3. Available Endpoints:
+    GET /resources: Get all AWS resources. 
+    POST /resources: Creates AWS resources based on specified parameters.
+    DELETE /resource: Deletes specified AWS resources.
 
 Example Usage with curl
 ```bash
@@ -107,19 +163,20 @@ curl -X DELETE http://localhost:5000/resource \
 
 To deploy this application on a Kubernetes cluster, you can use the provided Helm chart.
 
-    1. Build and Push Docker Image: Make sure your Docker image is available in a container registry accessible to Kubernetes (e.g., Docker Hub, AWS ECR).
-```bash
-docker build -t flask-app .
-docker push flask-app
-```
-    2. Update the Helm Values: Edit helm/flask-app/values.yaml to set the necessary environment variables, image repository, and tag.
+1. Build and Push Docker Image: Make sure your Docker image is available in a container registry accessible to Kubernetes (e.g., Docker Hub, AWS ECR).
 
-    3. Deploy with Helm:
+```bash
+docker build -t your_dockerhub_username/flask-app .
+docker push your_dockerhub_username/flask-app
+```
+2. Update the Helm Values: Edit helm/flask-app/values.yaml to set the necessary environment variables, image repository, and tag.
+
+3. Deploy with Helm:
+
 ```bash
 helm install flask-app helm/flask-app
 ```
-    4. Accessing the API:
-
+4. Accessing the API:
     * If using a LoadBalancer service type, obtain the external IP from kubectl get svc.
     * If using NodePort, access the service via <NodeIP>:<NodePort>.
 
@@ -157,7 +214,7 @@ Deletes a specific AWS resource.
 
 ### Parameters (JSON):
 
-    resource_name (string): Name of the resource to delete.
+resource_name (string): Name of the resource to delete.
 
 Example Request:
 ```json
